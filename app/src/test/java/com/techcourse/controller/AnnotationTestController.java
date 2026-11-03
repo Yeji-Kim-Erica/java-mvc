@@ -13,6 +13,7 @@ public class AnnotationTestController {
 
     @RequestMapping(value = "/annotation-test", method = RequestMethod.GET)
     public ModelAndView show(final HttpServletRequest request, final HttpServletResponse response) {
-        return new ModelAndView(new JspView("/annotation-test.jsp"));
+        return new ModelAndView(new JspView("/annotation-test.jsp"))
+                .addObject("name", "테리");
     }
 }

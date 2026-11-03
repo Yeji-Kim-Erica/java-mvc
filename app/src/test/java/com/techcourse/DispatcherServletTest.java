@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,7 @@ class DispatcherServletTest {
     }
 
     @Test
-    @DisplayName("어노테이션 Controller의 GET 요청을 처리하고 JSP로 forward한다")
+    @DisplayName("어노테이션 Controller의 GET 요청 처리 시 Model을 request attribute로 전달한 후 JSP로 forward한다")
     void annotationControllerGetForwardsToJsp() throws Exception {
         final var request = mock(HttpServletRequest.class);
         final var response = mock(HttpServletResponse.class);
@@ -48,6 +49,8 @@ class DispatcherServletTest {
 
         dispatcherServlet.service(request, response);
 
-        verify(requestDispatcher).forward(request, response);
+        final var inOrder = inOrder(request, requestDispatcher);
+        inOrder.verify(request).setAttribute("name", "테리");
+        inOrder.verify(requestDispatcher).forward(request, response);
     }
 }
