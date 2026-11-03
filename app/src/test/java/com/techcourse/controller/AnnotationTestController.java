@@ -12,8 +12,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AnnotationTestController {
 
     @RequestMapping(value = "/annotation-test", method = RequestMethod.GET)
-    public ModelAndView show(final HttpServletRequest request, final HttpServletResponse response) {
+    public ModelAndView get(final HttpServletRequest request, final HttpServletResponse response) {
         return new ModelAndView(new JspView("/annotation-test.jsp"))
                 .addObject("name", "테리");
+    }
+
+    @RequestMapping(value = "/annotation-test", method = RequestMethod.POST)
+    public ModelAndView post(final HttpServletRequest request, final HttpServletResponse response) {
+        return new ModelAndView(new JspView("redirect:/annotation-test"));
     }
 }

@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -52,5 +54,19 @@ class DispatcherServletTest {
         final var inOrder = inOrder(request, requestDispatcher);
         inOrder.verify(request).setAttribute("name", "테리");
         inOrder.verify(requestDispatcher).forward(request, response);
+    }
+
+    @Test
+    @DisplayName("어노테이션 Controller의 POST 요청 처리 시 지정한 경로로 redirect한다")
+    void annotationControllerPostRedirectsToTargetPath() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+        when(request.getRequestURI()).thenReturn("/annotation-test");
+        when(request.getMethod()).thenReturn("POST");
+
+        dispatcherServlet.service(request, response);
+
+        verify(response).sendRedirect("/annotation-test");
+        verify(request, never()).getRequestDispatcher(anyString());
     }
 }
